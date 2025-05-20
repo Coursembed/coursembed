@@ -1,0 +1,14 @@
+{
+  "Rules": [
+    {
+      "ID": "TempUploads",
+      "Expiration": {
+        "Days": 1
+      },
+      "Filter": {
+        "Prefix": "/temp"
+      },
+      "Status": "Enabled"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: litestar-server
+    depends_on:
+      - db
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    volumes:
+      - ./src:/app/src
+    env_file:
+      - .env
+
+  db:
+    image: postgres:latest
+    container_name: postgres-database
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_DB_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_DB_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${POSTGRES_DB_PORT}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data/pgdata
+    restart: always
+
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio
+    restart: always
+    command: ["server", "--address", ":9000", "--console-address", ":9001", "/data"]
+    volumes:
+      - minio_data:/data 
+    env_file:
+      - .env
+    ports:
+      - "${MINIO_PORT}:9000"
+      - "${MINIO_CONSOLE_PORT}:9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 1s
+      timeout: 5s
+      retries: 5
+      start_period: 1s
+
+  createbuckets:
+    build: ./minio/createbuckets
+    depends_on:
+      - minio
+    restart: on-failure
+    env_file:
+      - .env
+
+  weaviate:
+    container_name: weaviate
+    image: cr.weaviate.io/semitechnologies/weaviate:1.30.0
+    depends_on:
+      - prometheus
+    command:
+      - --host
+      - 0.0.0.0
+      - --port
+      - "${WEAVIATE_PORT}"
+      - --scheme
+      - http
+    ports:
+      - "${WEAVIATE_PORT}:${WEAVIATE_PORT}"
+      - 50051:50051
+    restart: on-failure:0
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      CLUSTER_HOSTNAME: 'node1'
+      PROMETHEUS_MONITORING_ENABLED: 'true'
+
+  prometheus:
+    container_name: prometheus
+    build: ./prometheus
+    ports:
+      - "9090:9090"
+  
+  grafana:
+    container_name: grafana
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    image: grafana/grafana-oss
+
+  alloy:
+    container_name: alloy
+    build: ./alloy
+    ports:
+      - "12345:12345"
+    depends_on:
+      - prometheus
+
+volumes:
+  db_data:
+  minio_data:
+  weaviate_data:
