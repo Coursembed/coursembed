@@ -6,7 +6,7 @@
         "Days": 1
       },
       "Filter": {
-        "Prefix": "/temp"
+        "Prefix": "temp/"
       },
       "Status": "Enabled"
     }
