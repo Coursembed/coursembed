@@ -5,9 +5,11 @@ from litestar.middleware.logging import LoggingMiddlewareConfig
 
 from dependencies import get_services
 from dependencies import get_repositories
+
 from controllers.migration_controller import MigrationController
 from controllers.block_controller import BlockController
 from controllers.workspace_controller import WorkspaceController
+from controllers.s3_controller import S3Controller
 
 
 logging_middleware_config = LoggingMiddlewareConfig()
@@ -18,7 +20,8 @@ app = Litestar(
     route_handlers=[
         MigrationController,
         BlockController,
-        WorkspaceController
+        WorkspaceController,
+        S3Controller
     ],
     dependencies={
         "services": Provide(get_services, sync_to_thread=False),

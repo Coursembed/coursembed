@@ -5,7 +5,7 @@ description = "Default template for PDM package"
 authors = [
     {name = "makinoharafan1", email = ""},
 ]
-dependencies = ["litestar>=2.15.2", "uvicorn>=0.34.2", "alembic>=1.15.2", "aiologger>=0.7.0", "psycopg2-binary>=2.9.10", "aiofiles>=24.1.0", "environ-config>=24.1.0", "pydantic>=2.11.4"]
+dependencies = ["litestar>=2.15.2", "uvicorn>=0.34.2", "alembic>=1.15.2", "aiologger>=0.7.0", "psycopg2-binary>=2.9.10", "aiofiles>=24.1.0", "environ-config>=24.1.0", "pydantic>=2.11.4", "minio>=7.2.15"]
 requires-python = "==3.12.*"
 readme = "README.md"
 license = {text = "MIT"}

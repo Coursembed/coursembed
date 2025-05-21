@@ -1,5 +1,6 @@
 from services.base import Services
 from services.migration_service import PostgresMigrationService
+from services.minio_service import MinioService
 
 from repositories.base import Repositories
 from repositories.block_repository import BlockRepository
@@ -9,7 +10,8 @@ from utils.psycopg2 import db_manager
 
 
 services = Services(
-    migration=PostgresMigrationService()
+    migration=PostgresMigrationService(),
+    s3=MinioService()
 )
 
 def get_services() -> Services:

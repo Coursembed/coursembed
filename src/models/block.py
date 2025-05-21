@@ -117,7 +117,7 @@ class BatchOperationType(str, Enum):
 class BatchBlockOperation(BaseModel):
     type: BatchOperationType
     block_id: UUID4
-    data: Union[BlockCreate, BlockUpdate, BlockMove, BlockDelete]
+    data: Optional[Union[BlockCreate, BlockUpdate, dict]] = None
 
 
 class BatchOperationRequest(BaseModel):

@@ -4,7 +4,7 @@ import requests
 import uuid
 
 
-class GigaChatAPIService():
+class GigaChatAPIService:
     def __init__(self, authorization_key: str, certificate_path: str):
         super().__init__()
         self.authorization_key = authorization_key

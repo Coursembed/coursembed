@@ -2,7 +2,7 @@ import uuid
 from typing import List, Dict, Any
 
 from litestar import get, post, put, delete
-from litestar.status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_404_NOT_FOUND
+from litestar.status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_404_NOT_FOUND
 from litestar.exceptions import HTTPException
 from litestar.controller import Controller
 
